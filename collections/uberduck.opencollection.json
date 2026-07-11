@@ -1,0 +1,87 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Uberduck Text To Speech API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{apiKey}}"
+    }
+  },
+  "items": [
+    {
+      "info": { "name": "Text-to-Speech", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Text To Speech", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uberduck.ai/v1/text-to-speech",
+            "body": { "type": "json", "data": "{\n  \"text\": \"Hello world! This is my first Uberduck API request.\",\n  \"voice\": \"polly_joanna\",\n  \"model\": \"polly_neural\",\n  \"output_format\": \"mp3\"\n}" }
+          },
+          "docs": "Convert up to 10,000 characters of text to speech with a chosen voice and model. Returns a URL to the generated audio."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Voices", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get Voices", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uberduck.ai/v1/voices",
+            "params": [
+              { "name": "gender", "value": "female", "type": "query", "description": "Filter by gender." },
+              { "name": "language", "value": "en", "type": "query", "description": "Filter by language." },
+              { "name": "limit", "value": "20", "type": "query", "description": "Page size." },
+              { "name": "offset", "value": "0", "type": "query", "description": "Pagination offset." }
+            ]
+          },
+          "docs": "List and filter available voices by age, gender, accent, mood, style, language, model, name, tag, or free-text search, with pagination."
+        },
+        {
+          "info": { "name": "Instant Voice Clone", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uberduck.ai/v1/voices",
+            "body": { "type": "json", "data": "{\n  \"paths\": [\"/path/to/reference-audio.wav\"],\n  \"name\": \"My Cloned Voice\",\n  \"description\": \"Zero-shot clone from a reference sample.\"\n}" }
+          },
+          "docs": "Create a zero-shot instant voice clone from one or more reference audio files. Returns the new voice's display name and UUID."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Models", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Get Models", "type": "http" },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uberduck.ai/v1/models",
+            "params": [
+              { "name": "provider", "value": "aws", "type": "query", "description": "Filter by provider (aws, google, azure)." }
+            ]
+          },
+          "docs": "List available text-to-speech models, optionally filtered by provider."
+        }
+      ]
+    },
+    {
+      "info": { "name": "Conversational", "type": "folder" },
+      "items": [
+        {
+          "info": { "name": "Generate Conversational Token", "type": "http" },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uberduck.ai/v1/conversational/token",
+            "body": { "type": "json", "data": "{\n  \"identity\": \"voice_assistant_user\",\n  \"agent_config\": {\n    \"app\": { \"app_id\": \"your-app-id\", \"path\": \"agent.yaml\" }\n  }\n}" }
+          },
+          "docs": "Mint a LiveKit token for a real-time AI voice call. Returns the LiveKit server URL, room name, and JWT participant token. Realtime media flows over LiveKit (WebRTC)."
+        }
+      ]
+    }
+  ]
+}

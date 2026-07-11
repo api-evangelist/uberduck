@@ -1,0 +1,102 @@
+{
+  "info": {
+    "name": "Uberduck Text To Speech API",
+    "description": "Uberduck's public AI voice API (OpenAPI 0.1.0). Convert text to speech, list and clone voices, list models, and mint LiveKit tokens for conversational AI voice calls. Base URL: https://api.uberduck.ai. All requests use a Bearer API key generated in Uberduck account settings. API access is a feature of the Creator plan and above.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      { "key": "token", "value": "{{apiKey}}", "type": "string" }
+    ]
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.uberduck.ai", "type": "string" },
+    { "key": "apiKey", "value": "", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Text-to-Speech",
+      "item": [
+        {
+          "name": "Text To Speech",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"text\": \"Hello world! This is my first Uberduck API request.\",\n  \"voice\": \"polly_joanna\",\n  \"model\": \"polly_neural\",\n  \"output_format\": \"mp3\"\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/text-to-speech", "host": ["{{baseUrl}}"], "path": ["v1", "text-to-speech"] },
+            "description": "Convert up to 10,000 characters of text to speech with a chosen voice and model. Returns a URL to the generated audio."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Voices",
+      "item": [
+        {
+          "name": "Get Voices",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/voices?gender=female&language=en&limit=20&offset=0",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "voices"],
+              "query": [
+                { "key": "gender", "value": "female" },
+                { "key": "language", "value": "en" },
+                { "key": "limit", "value": "20" },
+                { "key": "offset", "value": "0" }
+              ]
+            },
+            "description": "List and filter available voices by age, gender, accent, mood, style, language, model, name, tag, or free-text search, with pagination."
+          }
+        },
+        {
+          "name": "Instant Voice Clone",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"paths\": [\"/path/to/reference-audio.wav\"],\n  \"name\": \"My Cloned Voice\",\n  \"description\": \"Zero-shot clone from a reference sample.\"\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/voices", "host": ["{{baseUrl}}"], "path": ["v1", "voices"] },
+            "description": "Create a zero-shot instant voice clone from one or more reference audio files. Returns the new voice's display name and UUID."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Models",
+      "item": [
+        {
+          "name": "Get Models",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/v1/models?provider=aws",
+              "host": ["{{baseUrl}}"],
+              "path": ["v1", "models"],
+              "query": [{ "key": "provider", "value": "aws" }]
+            },
+            "description": "List available text-to-speech models, optionally filtered by provider (aws, google, azure)."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversational",
+      "item": [
+        {
+          "name": "Generate Conversational Token",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": { "mode": "raw", "raw": "{\n  \"identity\": \"voice_assistant_user\",\n  \"agent_config\": {\n    \"app\": { \"app_id\": \"your-app-id\", \"path\": \"agent.yaml\" }\n  }\n}" },
+            "url": { "raw": "{{baseUrl}}/v1/conversational/token", "host": ["{{baseUrl}}"], "path": ["v1", "conversational", "token"] },
+            "description": "Mint a LiveKit token for a real-time AI voice call. Returns the LiveKit server URL, room name, and JWT participant token. Realtime media flows over LiveKit (WebRTC)."
+          }
+        }
+      ]
+    }
+  ]
+}

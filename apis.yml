@@ -1,0 +1,142 @@
+aid: uberduck
+url: https://raw.githubusercontent.com/api-evangelist/uberduck/refs/heads/main/apis.yml
+name: Uberduck
+kind: company
+description: >-
+  Uberduck is an AI voice platform whose public REST API converts text into
+  natural-sounding speech across a catalog of voices and provider-backed models
+  (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates
+  instant zero-shot voice clones from reference audio, and mints LiveKit tokens
+  for real-time conversational AI voice calls. The API is HTTPS request/response
+  with Bearer API-key authentication. It is self-serve but gated behind a paid
+  plan - API access is a feature of the Creator plan and above. Uberduck's
+  earlier AI music / rap-vocals API surface is no longer part of the published
+  API; the current documented product (OpenAPI version 0.1.0) is focused on
+  text-to-speech, voices, and conversational voice.
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+tags:
+- AI
+- Text to Speech
+- TTS
+- Voice
+- Voice Cloning
+- Speech Synthesis
+- Conversational AI
+created: '2026-07-11'
+modified: '2026-07-11'
+specificationVersion: '0.19'
+apis:
+- aid: uberduck:uberduck-text-to-speech-api
+  name: Uberduck Text-to-Speech API
+  tags:
+  - Text to Speech
+  - TTS
+  - Speech Synthesis
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.uberduck.ai/api-reference/text-to-speech-v-1-text-to-speech-post
+  baseURL: https://api.uberduck.ai/v1
+  properties:
+  - url: https://docs.uberduck.ai/guides/text-to-speech
+    type: Documentation
+  - url: https://docs.uberduck.ai/api-reference/text-to-speech-v-1-text-to-speech-post
+    type: APIReference
+  - url: openapi/uberduck-openapi.yml
+    type: OpenAPI
+  - url: collections/uberduck.postman_collection.json
+    type: PostmanCollection
+  - url: collections/uberduck.opencollection.json
+    type: OpenCollection
+  description: >-
+    Convert up to 10,000 characters of text into speech with a chosen voice and
+    model via POST /v1/text-to-speech. Supports common and model-specific
+    parameters and a selectable output format (mp3, wav, etc.); returns a URL to
+    the generated audio.
+- aid: uberduck:uberduck-voices-api
+  name: Uberduck Voices API
+  tags:
+  - Voices
+  - Voice Cloning
+  - Catalog
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.uberduck.ai/guides/voice-selection
+  baseURL: https://api.uberduck.ai/v1
+  properties:
+  - url: https://docs.uberduck.ai/guides/voice-selection
+    type: Documentation
+  - url: https://docs.uberduck.ai/api-reference/endpoints/models
+    type: APIReference
+  - url: openapi/uberduck-openapi.yml
+    type: OpenAPI
+  - url: collections/uberduck.postman_collection.json
+    type: PostmanCollection
+  - url: collections/uberduck.opencollection.json
+    type: OpenCollection
+  description: >-
+    List and filter available voices (GET /v1/voices) by age, gender, accent,
+    mood, style, language, model, name, tag, or free-text search with
+    pagination, and create instant zero-shot voice clones from reference audio
+    (POST /v1/voices).
+- aid: uberduck:uberduck-models-api
+  name: Uberduck Models API
+  tags:
+  - Models
+  - Providers
+  - Catalog
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.uberduck.ai/api-reference/endpoints/models
+  baseURL: https://api.uberduck.ai/v1
+  properties:
+  - url: https://docs.uberduck.ai/api-reference/endpoints/models
+    type: APIReference
+  - url: openapi/uberduck-openapi.yml
+    type: OpenAPI
+  - url: collections/uberduck.postman_collection.json
+    type: PostmanCollection
+  - url: collections/uberduck.opencollection.json
+    type: OpenCollection
+  description: >-
+    List the text-to-speech models available on Uberduck (GET /v1/models),
+    optionally filtered by provider such as aws, google, or azure, with metadata
+    including provider, description, features, and whether a model is default or
+    open source.
+- aid: uberduck:uberduck-conversational-voice-api
+  name: Uberduck Conversational Voice API
+  tags:
+  - Conversational AI
+  - Voice Agents
+  - LiveKit
+  image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+  humanURL: https://docs.uberduck.ai/api-reference/uberduck-text-to-speech-api
+  baseURL: https://api.uberduck.ai/v1
+  properties:
+  - url: https://docs.uberduck.ai/api-reference/uberduck-text-to-speech-api
+    type: APIReference
+  - url: openapi/uberduck-openapi.yml
+    type: OpenAPI
+  - url: collections/uberduck.postman_collection.json
+    type: PostmanCollection
+  - url: collections/uberduck.opencollection.json
+    type: OpenCollection
+  description: >-
+    Mint a LiveKit token for a real-time AI voice call (POST
+    /v1/conversational/token). Returns the LiveKit server URL, a room name, and
+    a JWT participant token used to join the call. The realtime media transport
+    is provided by LiveKit (WebRTC), not by Uberduck's own HTTP API.
+common:
+- type: LinkedIn
+  url: https://www.linkedin.com/company/uberduck-ai
+- type: Website
+  url: https://uberduck.ai
+- type: Documentation
+  url: https://docs.uberduck.ai
+- type: APIReference
+  url: https://api.uberduck.ai/docs
+- type: Plans
+  url: plans/uberduck-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/uberduck-rate-limits.yml
+- type: FinOps
+  url: finops/uberduck-finops.yml
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

@@ -1,0 +1,107 @@
+aid: uberduck
+name: Uberduck
+review:
+  question: Does Uberduck expose a documented public WebSocket API?
+  answer: false
+  date: '2026-07-11'
+  reviewer: API Evangelist
+  asyncapiSpecCreated: false
+  asyncapiScopeNote: |
+    No AsyncAPI document was authored. Uberduck's own published API (OpenAPI
+    version 0.1.0, base https://api.uberduck.ai) is request/response REST over
+    HTTPS with no server-push transport (no WebSocket, no Server-Sent Events)
+    on Uberduck's own surface to model. The text-to-speech endpoint returns a
+    URL to the finished audio rather than streaming it. The one realtime
+    capability - POST /v1/conversational/token - does not itself stream; it
+    returns a LiveKit server URL, room name, and JWT so a client can join a
+    LiveKit room. The actual realtime media then flows over LiveKit's own
+    WebRTC transport (WebSocket signaling plus media), which belongs to LiveKit,
+    a third party, and is out of scope for an Uberduck AsyncAPI document.
+findings:
+  summary: |
+    Uberduck does not publish a documented public WebSocket API on its own
+    endpoint surface. Uberduck is an AI voice platform; its current public API
+    (title "Uberduck Text To Speech API", version 0.1.0, served at
+    https://api.uberduck.ai with a Swagger UI at https://api.uberduck.ai/docs
+    and an OpenAPI at https://api.uberduck.ai/openapi.json) is authenticated
+    with a Bearer API key and exposes four request/response REST paths:
+    POST /v1/text-to-speech, GET /v1/voices, POST /v1/voices (instant voice
+    clone), GET /v1/models, and POST /v1/conversational/token. All are plain
+    HTTPS request/response. Text-to-speech is effectively synchronous and
+    returns an audio_url. No ws:// or wss:// endpoint is documented anywhere in
+    Uberduck's API reference. The only realtime path returns a LiveKit token;
+    the realtime transport is LiveKit's WebRTC, not an Uberduck WebSocket.
+  accessModel: |
+    The API is self-serve but gated behind a paid plan. An API key is generated
+    from Uberduck account settings under the API section, and API access is a
+    feature of the Creator plan and above (not the free/Starter tier). There is
+    no waitlist or manual approval - any paying Creator/Pro subscriber can
+    generate a key immediately.
+  productPivotNote: |
+    Uberduck was historically known for an AI music / rap-vocals and
+    voice-automation API (earlier base https://api.uberduck.ai with HTTP Basic
+    key+secret auth and endpoints such as /speak and vocal/lyric generation).
+    The current published API has been reduced and refocused: it is a
+    text-to-speech, voices, voice-cloning, and conversational-voice API using
+    Bearer auth. The AI music/rap-vocals endpoints are not present in the
+    current OpenAPI (0.1.0) and were not modeled here. Everything documented in
+    this repo is confirmed against the live OpenAPI rather than modeled.
+  transports:
+    - protocol: REST
+      scheme: https
+      baseURL: https://api.uberduck.ai
+      documented: true
+      note: All four documented paths are request/response REST with Bearer auth.
+    - protocol: WebRTC (LiveKit)
+      scheme: wss
+      documented: false
+      note: >-
+        Reached indirectly by exchanging the JWT from POST /v1/conversational/token
+        for a LiveKit session. The realtime transport is LiveKit's (a third party),
+        not an Uberduck-documented endpoint. Uberduck documents only the token-minting
+        REST call.
+    - protocol: WebSocket
+      scheme: wss
+      documented: false
+      note: No native WebSocket endpoint is documented on Uberduck's own API as of the review date.
+    - protocol: SSE
+      scheme: https
+      documented: false
+      note: No Server-Sent Events streaming is documented; text-to-speech returns a completed audio_url.
+  endpointsConfirmedRest:
+    - POST https://api.uberduck.ai/v1/text-to-speech
+    - GET  https://api.uberduck.ai/v1/voices
+    - POST https://api.uberduck.ai/v1/voices
+    - GET  https://api.uberduck.ai/v1/models
+    - POST https://api.uberduck.ai/v1/conversational/token
+sources:
+  - url: https://docs.uberduck.ai/
+    type: Documentation
+    note: Introduction; base URL https://api.uberduck.ai/v1 and Bearer auth. No WebSocket mentioned.
+  - url: https://docs.uberduck.ai/guides/getting-started
+    type: Documentation
+    note: Bearer auth, API key generated in account settings, self-serve setup.
+  - url: https://api.uberduck.ai/docs
+    type: APIReference
+    note: Swagger UI for the Uberduck Text To Speech API (version 0.1.0). All REST.
+  - url: https://api.uberduck.ai/openapi.json
+    type: OpenAPI
+    note: >-
+      Source-of-truth OpenAPI 0.1.0. Security scheme HTTPBearer; four REST paths
+      including /v1/conversational/token which returns a LiveKit token. No WebSocket path.
+  - url: https://docs.uberduck.ai/api-reference/rate-limits
+    type: Documentation
+    note: Per-minute / per-day tiered limits and 429 handling; all over HTTP REST.
+  - url: https://www.uberduck.ai/pricing
+    type: Pricing
+    note: Starter/Creator/Pro plans; API access on Creator and above.
+actions:
+  asyncapiPath: null
+  apisYmlUpdated: true
+  reason: |
+    No WebSocket (or SSE) protocol surface exists on Uberduck's own API, so no
+    AsyncAPI document was created. Uberduck's public API is request/response
+    REST (text-to-speech, voices, instant voice clone, models) plus a single
+    REST call that mints a LiveKit token; any realtime streaming happens inside
+    LiveKit's third-party WebRTC transport, which is out of scope for an
+    Uberduck AsyncAPI document.

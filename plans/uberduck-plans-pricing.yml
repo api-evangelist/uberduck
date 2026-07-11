@@ -1,0 +1,122 @@
+specification: API Commons Plans
+specificationVersion: '0.1'
+schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main/schema/api-commons.yml#/$defs/Plans
+provider: Uberduck
+providerId: uberduck
+created: '2026-07-11'
+modified: '2026-07-11'
+reconciled: false
+tags:
+- AI
+- Text to Speech
+- Voice
+- Plans
+description: >-
+  Uberduck is sold as a credit-based subscription. Speech generation, voice
+  cloning, and API calls draw down a monthly credit allowance that resets each
+  billing cycle. API access and a commercial-use license are not available on
+  the free/Starter tier - they begin on the Creator plan. Prices below are the
+  effective monthly rates when billed yearly (the pricing page advertises a
+  yearly discount, described as roughly six months free); month-to-month rates
+  are higher. Credit allowances are the figures shown on the pricing page at the
+  review date and should be re-verified during reconciliation.
+notes: >-
+  Prices captured 2026-07-11 from https://www.uberduck.ai/pricing and reflect
+  the yearly-billing effective monthly price. The API itself has no separate
+  per-call invoice beyond credit consumption; each request consumes credits from
+  the plan allowance. Enterprise/custom terms are handled via sales. Re-verify
+  current tiers, credit counts, and whether a standalone free tier persists.
+sources:
+- https://www.uberduck.ai/pricing
+- https://docs.uberduck.ai/api-reference/rate-limits
+- https://docs.uberduck.ai/guides/getting-started
+plans:
+- id: uberduck-starter
+  name: Starter
+  type: paid
+  description: >-
+    Entry tier for quick personal, non-commercial use. No commercial license
+    and no API access.
+  entries:
+  - label: Monthly Credits
+    name: starter_credits
+    type: usage
+    metric: credits
+    limit: 1000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: about $2/month billed yearly
+    userMultiplied: false
+  elements:
+  - name: 1,000 Monthly Credits
+  - name: Personal / Non-Commercial Use
+  - name: No API Access
+- id: uberduck-creator
+  name: Creator
+  type: paid
+  description: >-
+    First tier with API access and a commercial-use license. Targets creators
+    integrating text-to-speech and voices programmatically.
+  entries:
+  - label: Monthly Credits
+    name: creator_credits
+    type: usage
+    metric: credits
+    limit: 3600
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: about $5/month billed yearly
+    userMultiplied: false
+  elements:
+  - name: 3,600 Monthly Credits
+  - name: API Access
+  - name: Commercial License
+- id: uberduck-pro
+  name: Pro
+  type: paid
+  description: >-
+    Higher-volume tier with a larger credit allowance, API access, commercial
+    license, and priority support.
+  entries:
+  - label: Monthly Credits
+    name: pro_credits
+    type: usage
+    metric: credits
+    limit: 25000
+    timeFrame: month
+    geo: global
+    unit: 1
+    price: about $30/month billed yearly
+    userMultiplied: false
+  elements:
+  - name: 25,000 Monthly Credits
+  - name: API Access
+  - name: Commercial License
+  - name: Priority Support
+- id: uberduck-enterprise
+  name: Enterprise / Custom
+  type: enterprise
+  description: >-
+    Custom plan for high-volume usage, custom rate limits, and negotiated terms.
+    Contact Uberduck.
+  entries:
+  - label: Enterprise Agreement
+    name: enterprise
+    type: flat
+    metric: contract
+    limit: -1
+    timeFrame: year
+    geo: global
+    unit: 1
+    price: contact sales
+    userMultiplied: false
+  elements:
+  - name: Custom Credit Volume
+  - name: Custom Rate Limits
+  - name: API Access
+  - name: Commercial License
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com

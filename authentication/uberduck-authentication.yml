@@ -1,0 +1,13 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/uberduck-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: HTTPBearer
+  type: http
+  scheme: bearer
+  description: Bearer API key generated in Uberduck account settings under the API section.
+  sources:
+  - openapi/uberduck-openapi.yml

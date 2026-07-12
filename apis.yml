@@ -123,6 +123,10 @@ apis:
     a JWT participant token used to join the call. The realtime media transport
     is provided by LiveKit (WebRTC), not by Uberduck's own HTTP API.
 common:
+- type: DomainSecurity
+  url: security/uberduck-domain-security.yml
+- type: Authentication
+  url: authentication/uberduck-authentication.yml
 - type: LinkedIn
   url: https://www.linkedin.com/company/uberduck-ai
 - type: Website

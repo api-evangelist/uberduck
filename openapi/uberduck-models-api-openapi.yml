@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Uberduck Text To Speech Conversational Models API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  version: 0.1.0
+  contact:
+    name: Uberduck
+    url: https://uberduck.ai
+servers:
+- url: https://api.uberduck.ai
+  description: Uberduck production API
+security:
+- HTTPBearer: []
+tags:
+- name: Models
+  description: List available text-to-speech models by provider.
+paths:
+  /v1/models:
+    get:
+      operationId: getModels
+      tags:
+      - Models
+      summary: Get Models
+      description: List available text-to-speech models, optionally filtered by provider (for example aws, google, or azure).
+      parameters:
+      - name: provider
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of models.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetModelsResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  schemas:
+    Model:
+      type: object
+      description: Schema for a TTS model.
+      required:
+      - id
+      - name
+      - provider_id
+      - provider_name
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the model.
+        name:
+          type: string
+          description: Display name for the model.
+        provider_id:
+          type: string
+          description: Provider identifier.
+        provider_name:
+          type: string
+          description: Provider name (e.g., 'aws', 'google', 'azure').
+        description:
+          type: string
+          description: Description of the model.
+        features:
+          type: array
+          items:
+            type: string
+          description: List of features supported by this model.
+        is_default:
+          type: boolean
+          default: false
+        is_open_source:
+          type: boolean
+          default: false
+        app_path:
+          type: string
+        has_voices:
+          type: boolean
+          default: true
+    GetModelsResponse:
+      type: object
+      description: Response schema for the models endpoint.
+      required:
+      - models
+      - total
+      properties:
+        models:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+        total:
+          type: integer
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+      description: Bearer API key generated in Uberduck account settings under the API section.

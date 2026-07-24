@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Uberduck Text To Speech Conversational Text-to-Speech API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  version: 0.1.0
+  contact:
+    name: Uberduck
+    url: https://uberduck.ai
+servers:
+- url: https://api.uberduck.ai
+  description: Uberduck production API
+security:
+- HTTPBearer: []
+tags:
+- name: Text-to-Speech
+  description: Synthesize speech from text using a chosen voice and model.
+paths:
+  /v1/text-to-speech:
+    post:
+      operationId: textToSpeech
+      tags:
+      - Text-to-Speech
+      summary: Text To Speech
+      description: Convert up to 10,000 characters of text into speech using a specified voice and model. Returns a URL to the generated audio.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TextToSpeechRequest'
+      responses:
+        '200':
+          description: Generated audio.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextToSpeechResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  responses:
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    TextToSpeechResponse:
+      type: object
+      description: Response schema for the text-to-speech endpoint.
+      required:
+      - audio_url
+      properties:
+        audio_url:
+          type: string
+          description: URL to the generated audio.
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
+    TextToSpeechRequest:
+      type: object
+      description: Request schema for the text-to-speech endpoint.
+      required:
+      - text
+      - voice
+      properties:
+        text:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: The text to convert to speech.
+        voice:
+          type: string
+          description: The voice ID to use.
+        model:
+          type: string
+          description: The model to use for speech generation.
+        extended:
+          type: object
+          description: Common parameters supported by many models.
+        model_specific:
+          type: object
+          description: Parameters specific to the chosen model.
+        output_format:
+          type: string
+          default: mp3
+          description: Desired output format (mp3, wav, etc.).
+    ErrorResponse:
+      type: object
+      description: API error response format.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    ErrorDetail:
+      type: object
+      description: Details for an API error.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+      description: Bearer API key generated in Uberduck account settings under the API section.

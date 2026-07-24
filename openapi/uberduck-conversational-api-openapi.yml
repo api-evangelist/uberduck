@@ -1,0 +1,175 @@
+openapi: 3.0.3
+info:
+  title: Uberduck Text To Speech Conversational API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  version: 0.1.0
+  contact:
+    name: Uberduck
+    url: https://uberduck.ai
+servers:
+- url: https://api.uberduck.ai
+  description: Uberduck production API
+security:
+- HTTPBearer: []
+tags:
+- name: Conversational
+  description: Mint LiveKit tokens for real-time conversational AI voice calls.
+paths:
+  /v1/conversational/token:
+    post:
+      operationId: generateConversationalToken
+      tags:
+      - Conversational
+      summary: Generate Conversational Token
+      description: Generate a LiveKit token for a real-time AI voice call. Returns the LiveKit server URL, a room name, and a JWT participant token the client uses to join the room. The realtime media transport itself is provided by LiveKit (WebRTC), not by Uberduck's own HTTP API.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConversationalTokenRequest'
+      responses:
+        '200':
+          description: LiveKit connection details.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationalTokenResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+        '500':
+          description: Internal server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+components:
+  schemas:
+    AgentConfig:
+      type: object
+      properties:
+        raw:
+          type: string
+          description: Raw agent configuration in YAML format.
+        json:
+          type: object
+          description: Agent configuration as dictionary/JSON format.
+        url:
+          type: string
+          description: URL that points to agent configuration in YAML format.
+        app:
+          $ref: '#/components/schemas/AppAgentConfig'
+    ConversationalTokenResponse:
+      type: object
+      description: Response schema for LiveKit token generation.
+      required:
+      - server_url
+      - room_name
+      - participant_token
+      properties:
+        server_url:
+          type: string
+          description: LiveKit server URL.
+        room_name:
+          type: string
+          description: Room name to join.
+        participant_token:
+          type: string
+          description: JWT token for authentication.
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
+    ConversationalTokenRequest:
+      type: object
+      description: Request schema for generating a LiveKit token for AI voice calls.
+      properties:
+        agent_config:
+          $ref: '#/components/schemas/AgentConfig'
+        identity:
+          type: string
+          description: User identity (defaults to 'voice_assistant_user').
+        metadata:
+          type: object
+          description: Additional metadata to include in the token.
+    ErrorResponse:
+      type: object
+      description: API error response format.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
+    AppAgentConfig:
+      type: object
+      required:
+      - app_id
+      properties:
+        app_id:
+          type: string
+          description: App ID.
+        path:
+          type: string
+          default: agent.yaml
+          description: Path to the app.
+    ErrorDetail:
+      type: object
+      description: Details for an API error.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+      description: Bearer API key generated in Uberduck account settings under the API section.

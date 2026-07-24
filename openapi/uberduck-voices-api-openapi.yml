@@ -1,0 +1,231 @@
+openapi: 3.0.3
+info:
+  title: Uberduck Text To Speech Conversational Voices API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  version: 0.1.0
+  contact:
+    name: Uberduck
+    url: https://uberduck.ai
+servers:
+- url: https://api.uberduck.ai
+  description: Uberduck production API
+security:
+- HTTPBearer: []
+tags:
+- name: Voices
+  description: List, filter, and clone voices.
+paths:
+  /v1/voices:
+    get:
+      operationId: getVoices
+      tags:
+      - Voices
+      summary: Get Voices
+      description: Retrieve available voices with optional filters for age, gender, accent, mood, style, language, model, name, tag, or free-text search, plus pagination via limit and offset.
+      parameters:
+      - name: age
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: gender
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: accent
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: mood
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: style
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: language
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: offset
+        in: query
+        required: false
+        schema:
+          type: integer
+      - name: private
+        in: query
+        required: false
+        schema:
+          type: boolean
+      - name: name
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: uuid
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: model
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: search_term
+        in: query
+        required: false
+        schema:
+          type: string
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A list of voices.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetVoicesResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+    post:
+      operationId: instantVoiceClone
+      tags:
+      - Voices
+      summary: Instant Voice Clone
+      description: Create a zero-shot instant voice clone from one or more reference audio files without generating a sample. Returns the new voice's display name and UUID.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InstantVoiceCloneRequest'
+      responses:
+        '200':
+          description: The created voice.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstantVoiceCloneResponse'
+        '422':
+          $ref: '#/components/responses/ValidationError'
+components:
+  schemas:
+    InstantVoiceCloneResponse:
+      type: object
+      required:
+      - display_name
+      - voicemodel_uuid
+      properties:
+        display_name:
+          type: string
+          description: Display name of the voice.
+        voicemodel_uuid:
+          type: string
+          description: UUID of the voice.
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
+    Voice:
+      type: object
+      properties:
+        display_name:
+          type: string
+        voicemodel_uuid:
+          type: string
+        is_private:
+          type: boolean
+        age:
+          type: string
+        gender:
+          type: string
+        accent:
+          type: string
+        style:
+          type: string
+        mood:
+          type: string
+        image_url:
+          type: string
+        sample_url:
+          type: string
+        name:
+          type: string
+    GetVoicesResponse:
+      type: object
+      required:
+      - total
+      - voices
+      properties:
+        total:
+          type: integer
+        voices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Voice'
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    InstantVoiceCloneRequest:
+      type: object
+      required:
+      - paths
+      - name
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+          description: List of paths to audio files.
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the voice.
+        description:
+          type: string
+          maxLength: 1000
+          description: Description of the voice.
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
+  securitySchemes:
+    HTTPBearer:
+      type: http
+      scheme: bearer
+      description: Bearer API key generated in Uberduck account settings under the API section.

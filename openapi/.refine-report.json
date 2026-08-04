@@ -1,0 +1,20 @@
+{
+  "provider": "uberduck",
+  "sources": [
+    "uberduck-conversational-api-openapi.yml",
+    "uberduck-models-api-openapi.yml",
+    "uberduck-text-to-speech-api-openapi.yml",
+    "uberduck-voices-api-openapi.yml"
+  ],
+  "outputs": [
+    "uberduck-conversational-api-openapi.yml",
+    "uberduck-models-api-openapi.yml",
+    "uberduck-text-to-speech-api-openapi.yml",
+    "uberduck-voices-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

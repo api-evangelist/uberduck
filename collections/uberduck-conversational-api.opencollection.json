@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Uberduck Text To Speech Conversational API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conversational",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate Conversational Token",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uberduck.ai/v1/conversational/token",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generate a LiveKit token for a real-time AI voice call. Returns the LiveKit server URL, a room name, and a JWT participant token the client uses to join the room. The realtime media transport itself is provided by LiveKit (WebRTC), not by Uberduck's own HTTP API."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

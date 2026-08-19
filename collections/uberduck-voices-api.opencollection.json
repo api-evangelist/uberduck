@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Uberduck Text To Speech Conversational Voices API",
+    "version": "0.1.0"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Voices",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Voices",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.uberduck.ai/v1/voices",
+            "params": [
+              {
+                "name": "age",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "gender",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "accent",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "mood",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "style",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "language",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "private",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "model",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "search_term",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Retrieve available voices with optional filters for age, gender, accent, mood, style, language, model, name, tag, or free-text search, plus pagination via limit and offset."
+        },
+        {
+          "info": {
+            "name": "Instant Voice Clone",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.uberduck.ai/v1/voices",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a zero-shot instant voice clone from one or more reference audio files without generating a sample. Returns the new voice's display name and UUID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

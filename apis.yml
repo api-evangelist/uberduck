@@ -28,6 +28,14 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/uberduck.png
 tags:
+- Artificial Intelligence
+- Text-to-Speech
+- TTS
+- Voice
+- Voice Cloning
+- Speech Synthesis
+- Conversational AI
+tags_raw:
 - AI
 - Text to Speech
 - TTS

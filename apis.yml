@@ -13,6 +13,18 @@ description: >-
   earlier AI music / rap-vocals API surface is no longer part of the published
   API; the current documented product (OpenAPI version 0.1.0) is focused on
   text-to-speech, voices, and conversational voice.
+deliveryModel:
+  model: saas
+  open_source: false
+  commercial: true
+  callable_host: true
+  label: Hosted service · you call their endpoint
+  confidence: high
+  source:
+  - openapi
+  - pricing
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: paid
   onboarding: self-serve

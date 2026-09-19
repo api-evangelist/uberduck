@@ -138,6 +138,8 @@ apis:
   humanURL: https://docs.uberduck.ai/api-reference/text-to-speech-v-1-text-to-speech-post
   baseURL: https://api.uberduck.ai/v1
   tags:
+  - Voice
+  tags_raw:
   - Voices
   properties:
   - type: OpenAPI

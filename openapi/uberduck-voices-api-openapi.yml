@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Uberduck Text To Speech Conversational Voices API
-  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  title: Uberduck Text To Speech Voices API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls.
   version: 0.1.0
   contact:
     name: Uberduck
@@ -154,6 +154,37 @@ components:
           type: string
         type:
           type: string
+    GetVoicesResponse:
+      type: object
+      required:
+      - total
+      - voices
+      properties:
+        total:
+          type: integer
+        voices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Voice'
+    InstantVoiceCloneRequest:
+      type: object
+      required:
+      - paths
+      - name
+      properties:
+        paths:
+          type: array
+          items:
+            type: string
+          description: List of paths to audio files.
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the voice.
+        description:
+          type: string
+          maxLength: 1000
+          description: Description of the voice.
     Voice:
       type: object
       properties:
@@ -179,18 +210,6 @@ components:
           type: string
         name:
           type: string
-    GetVoicesResponse:
-      type: object
-      required:
-      - total
-      - voices
-      properties:
-        total:
-          type: integer
-        voices:
-          type: array
-          items:
-            $ref: '#/components/schemas/Voice'
     HTTPValidationError:
       type: object
       properties:
@@ -198,25 +217,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationError'
-    InstantVoiceCloneRequest:
-      type: object
-      required:
-      - paths
-      - name
-      properties:
-        paths:
-          type: array
-          items:
-            type: string
-          description: List of paths to audio files.
-        name:
-          type: string
-          maxLength: 100
-          description: Name of the voice.
-        description:
-          type: string
-          maxLength: 1000
-          description: Description of the voice.
   responses:
     ValidationError:
       description: Validation error.

@@ -1,7 +1,7 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Uberduck Text To Speech Conversational Models API
-  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls. All requests are HTTPS request/response and authenticate with a Bearer API key generated in the Uberduck account settings. API access is a paid feature available on the Creator plan and above. This document is transcribed from Uberduck's published OpenAPI (https://api.uberduck.ai/openapi.json, version 0.1.0) and its Swagger UI at https://api.uberduck.ai/docs.
+  title: Uberduck Text To Speech Models API
+  description: The Uberduck API converts text to natural-sounding speech across a catalog of voices and provider-backed models (AWS Polly, Google Cloud, Azure), lists and filters those voices, creates instant zero-shot voice clones from reference audio, and mints short-lived LiveKit tokens for real-time conversational AI voice calls.
   version: 0.1.0
   contact:
     name: Uberduck
@@ -38,7 +38,51 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
   schemas:
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    GetModelsResponse:
+      type: object
+      description: Response schema for the models endpoint.
+      required:
+      - models
+      - total
+      properties:
+        models:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+        total:
+          type: integer
     Model:
       type: object
       description: Schema for a TTS model.
@@ -79,50 +123,6 @@ components:
         has_voices:
           type: boolean
           default: true
-    GetModelsResponse:
-      type: object
-      description: Response schema for the models endpoint.
-      required:
-      - models
-      - total
-      properties:
-        models:
-          type: array
-          items:
-            $ref: '#/components/schemas/Model'
-        total:
-          type: integer
-    ValidationError:
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      properties:
-        loc:
-          type: array
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-        msg:
-          type: string
-        type:
-          type: string
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-  responses:
-    ValidationError:
-      description: Validation error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HTTPValidationError'
   securitySchemes:
     HTTPBearer:
       type: http

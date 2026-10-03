@@ -39,6 +39,13 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
     GetModelsResponse:
       type: object
       description: Response schema for the models endpoint.
@@ -52,13 +59,6 @@ components:
             $ref: '#/components/schemas/Model'
         total:
           type: integer
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
     Model:
       type: object
       description: Schema for a TTS model.

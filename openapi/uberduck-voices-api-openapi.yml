@@ -125,37 +125,6 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
-    InstantVoiceCloneResponse:
-      type: object
-      required:
-      - display_name
-      - voicemodel_uuid
-      properties:
-        display_name:
-          type: string
-          description: Display name of the voice.
-        voicemodel_uuid:
-          type: string
-          description: UUID of the voice.
-    GetVoicesResponse:
-      type: object
-      required:
-      - total
-      - voices
-      properties:
-        total:
-          type: integer
-        voices:
-          type: array
-          items:
-            $ref: '#/components/schemas/Voice'
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
     InstantVoiceCloneRequest:
       type: object
       required:
@@ -175,23 +144,6 @@ components:
           type: string
           maxLength: 1000
           description: Description of the voice.
-    ValidationError:
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      properties:
-        loc:
-          type: array
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-        msg:
-          type: string
-        type:
-          type: string
     Voice:
       type: object
       properties:
@@ -216,6 +168,54 @@ components:
         sample_url:
           type: string
         name:
+          type: string
+    GetVoicesResponse:
+      type: object
+      required:
+      - total
+      - voices
+      properties:
+        total:
+          type: integer
+        voices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Voice'
+    InstantVoiceCloneResponse:
+      type: object
+      required:
+      - display_name
+      - voicemodel_uuid
+      properties:
+        display_name:
+          type: string
+          description: Display name of the voice.
+        voicemodel_uuid:
+          type: string
+          description: UUID of the voice.
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
           type: string
   responses:
     ValidationError:

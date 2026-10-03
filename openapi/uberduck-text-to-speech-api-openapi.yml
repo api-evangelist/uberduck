@@ -44,24 +44,39 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  responses:
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: Resource not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
   schemas:
-    ErrorResponse:
+    HTTPValidationError:
       type: object
-      description: API error response format.
-      required:
-      - error
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
-    TextToSpeechResponse:
-      type: object
-      description: Response schema for the text-to-speech endpoint.
-      required:
-      - audio_url
-      properties:
-        audio_url:
-          type: string
-          description: URL to the generated audio.
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
     ErrorDetail:
       type: object
       description: Details for an API error.
@@ -75,13 +90,23 @@ components:
           type: string
         details:
           type: object
-    HTTPValidationError:
+    ValidationError:
       type: object
+      required:
+      - loc
+      - msg
+      - type
       properties:
-        detail:
+        loc:
           type: array
           items:
-            $ref: '#/components/schemas/ValidationError'
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
     TextToSpeechRequest:
       type: object
       description: Request schema for the text-to-speech endpoint.
@@ -110,48 +135,23 @@ components:
           type: string
           default: mp3
           description: Desired output format (mp3, wav, etc.).
-    ValidationError:
+    TextToSpeechResponse:
       type: object
+      description: Response schema for the text-to-speech endpoint.
       required:
-      - loc
-      - msg
-      - type
+      - audio_url
       properties:
-        loc:
-          type: array
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-        msg:
+        audio_url:
           type: string
-        type:
-          type: string
-  responses:
-    NotFound:
-      description: Resource not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    ValidationError:
-      description: Validation error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HTTPValidationError'
+          description: URL to the generated audio.
+    ErrorResponse:
+      type: object
+      description: API error response format.
+      required:
+      - error
+      properties:
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
   securitySchemes:
     HTTPBearer:
       type: http

@@ -49,14 +49,38 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
-    ErrorResponse:
+    AppAgentConfig:
       type: object
-      description: API error response format.
       required:
-      - error
+      - app_id
       properties:
-        error:
-          $ref: '#/components/schemas/ErrorDetail'
+        app_id:
+          type: string
+          description: App ID.
+        path:
+          type: string
+          default: agent.yaml
+          description: Path to the app.
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    ErrorDetail:
+      type: object
+      description: Details for an API error.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
     ValidationError:
       type: object
       required:
@@ -91,38 +115,14 @@ components:
         participant_token:
           type: string
           description: JWT token for authentication.
-    ErrorDetail:
+    ErrorResponse:
       type: object
-      description: Details for an API error.
+      description: API error response format.
       required:
-      - code
-      - message
+      - error
       properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: object
-    AppAgentConfig:
-      type: object
-      required:
-      - app_id
-      properties:
-        app_id:
-          type: string
-          description: App ID.
-        path:
-          type: string
-          default: agent.yaml
-          description: Path to the app.
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
+        error:
+          $ref: '#/components/schemas/ErrorDetail'
     AgentConfig:
       type: object
       properties:

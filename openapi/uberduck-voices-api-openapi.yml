@@ -125,25 +125,18 @@ paths:
           $ref: '#/components/responses/ValidationError'
 components:
   schemas:
-    InstantVoiceCloneRequest:
+    GetVoicesResponse:
       type: object
       required:
-      - paths
-      - name
+      - total
+      - voices
       properties:
-        paths:
+        total:
+          type: integer
+        voices:
           type: array
           items:
-            type: string
-          description: List of paths to audio files.
-        name:
-          type: string
-          maxLength: 100
-          description: Name of the voice.
-        description:
-          type: string
-          maxLength: 1000
-          description: Description of the voice.
+            $ref: '#/components/schemas/Voice'
     Voice:
       type: object
       properties:
@@ -169,18 +162,42 @@ components:
           type: string
         name:
           type: string
-    GetVoicesResponse:
+    InstantVoiceCloneRequest:
       type: object
       required:
-      - total
-      - voices
+      - paths
+      - name
       properties:
-        total:
-          type: integer
-        voices:
+        paths:
           type: array
           items:
-            $ref: '#/components/schemas/Voice'
+            type: string
+          description: List of paths to audio files.
+        name:
+          type: string
+          maxLength: 100
+          description: Name of the voice.
+        description:
+          type: string
+          maxLength: 1000
+          description: Description of the voice.
+    ValidationError:
+      type: object
+      required:
+      - loc
+      - msg
+      - type
+      properties:
+        loc:
+          type: array
+          items:
+            anyOf:
+            - type: string
+            - type: integer
+        msg:
+          type: string
+        type:
+          type: string
     InstantVoiceCloneResponse:
       type: object
       required:
@@ -200,23 +217,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ValidationError'
-    ValidationError:
-      type: object
-      required:
-      - loc
-      - msg
-      - type
-      properties:
-        loc:
-          type: array
-          items:
-            anyOf:
-            - type: string
-            - type: integer
-        msg:
-          type: string
-        type:
-          type: string
   responses:
     ValidationError:
       description: Validation error.

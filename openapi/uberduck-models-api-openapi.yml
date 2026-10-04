@@ -38,27 +38,14 @@ paths:
         '422':
           $ref: '#/components/responses/ValidationError'
 components:
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
   schemas:
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-    GetModelsResponse:
-      type: object
-      description: Response schema for the models endpoint.
-      required:
-      - models
-      - total
-      properties:
-        models:
-          type: array
-          items:
-            $ref: '#/components/schemas/Model'
-        total:
-          type: integer
     Model:
       type: object
       description: Schema for a TTS model.
@@ -99,6 +86,19 @@ components:
         has_voices:
           type: boolean
           default: true
+    GetModelsResponse:
+      type: object
+      description: Response schema for the models endpoint.
+      required:
+      - models
+      - total
+      properties:
+        models:
+          type: array
+          items:
+            $ref: '#/components/schemas/Model'
+        total:
+          type: integer
     ValidationError:
       type: object
       required:
@@ -116,13 +116,13 @@ components:
           type: string
         type:
           type: string
-  responses:
-    ValidationError:
-      description: Validation error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HTTPValidationError'
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
   securitySchemes:
     HTTPBearer:
       type: http

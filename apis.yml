@@ -57,7 +57,7 @@ tags_raw:
 - Speech Synthesis
 - Conversational AI
 created: '2026-07-11'
-modified: '2026-07-11'
+modified: '2026-10-06'
 specificationVersion: '0.23'
 apis:
 - aid: uberduck:uberduck-conversational-api
@@ -161,6 +161,8 @@ apis:
   - type: APIReference
     url: https://docs.uberduck.ai/api-reference/uberduck-text-to-speech-api
 common:
+- url: https://www.uberduck.ai/blog
+  type: Blog
 - type: AgenticAccess
   url: agentic-access/uberduck-agentic-access.yml
 - type: DomainSecurity

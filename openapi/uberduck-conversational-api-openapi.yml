@@ -48,26 +48,27 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 components:
-  responses:
-    ValidationError:
-      description: Validation error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HTTPValidationError'
-    BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    Unauthorized:
-      description: Missing or invalid API key.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
   schemas:
+    ErrorDetail:
+      type: object
+      description: Details for an API error.
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: string
+        message:
+          type: string
+        details:
+          type: object
+    HTTPValidationError:
+      type: object
+      properties:
+        detail:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
     AppAgentConfig:
       type: object
       required:
@@ -109,6 +110,20 @@ components:
         participant_token:
           type: string
           description: JWT token for authentication.
+    AgentConfig:
+      type: object
+      properties:
+        raw:
+          type: string
+          description: Raw agent configuration in YAML format.
+        json:
+          type: object
+          description: Agent configuration as dictionary/JSON format.
+        url:
+          type: string
+          description: URL that points to agent configuration in YAML format.
+        app:
+          $ref: '#/components/schemas/AppAgentConfig'
     ErrorResponse:
       type: object
       description: API error response format.
@@ -117,19 +132,6 @@ components:
       properties:
         error:
           $ref: '#/components/schemas/ErrorDetail'
-    ErrorDetail:
-      type: object
-      description: Details for an API error.
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: string
-        message:
-          type: string
-        details:
-          type: object
     ValidationError:
       type: object
       required:
@@ -147,27 +149,25 @@ components:
           type: string
         type:
           type: string
-    HTTPValidationError:
-      type: object
-      properties:
-        detail:
-          type: array
-          items:
-            $ref: '#/components/schemas/ValidationError'
-    AgentConfig:
-      type: object
-      properties:
-        raw:
-          type: string
-          description: Raw agent configuration in YAML format.
-        json:
-          type: object
-          description: Agent configuration as dictionary/JSON format.
-        url:
-          type: string
-          description: URL that points to agent configuration in YAML format.
-        app:
-          $ref: '#/components/schemas/AppAgentConfig'
+  responses:
+    ValidationError:
+      description: Validation error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HTTPValidationError'
+    BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Missing or invalid API key.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     HTTPBearer:
       type: http
